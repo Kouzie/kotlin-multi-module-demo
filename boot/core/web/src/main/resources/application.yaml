@@ -1,0 +1,26 @@
+# env
+SWAGGER_UI_URL: /v3/api-docs
+SWAGGER_CONFIG_URL: /v3/api-docs/swagger-config
+SWAGGER_OAUTH2_REDIRECT_URL: /swagger-ui/oauth2-redirect.html
+# spring config
+spring:
+  config:
+    activate:
+      on-profile: "core"
+# actuator config
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+# swagger
+springdoc:
+  swagger-ui:
+    url: ${SWAGGER_UI_URL}
+    config-url: ${SWAGGER_CONFIG_URL}
+    oauth2-redirect-url: ${SWAGGER_OAUTH2_REDIRECT_URL}
+# logging
+logging:
+  level:
+    root: info
+
