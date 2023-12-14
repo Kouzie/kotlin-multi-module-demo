@@ -21,6 +21,6 @@ class GlobalErrorAttributes : DefaultErrorAttributes() {
             map["code"] = 500;
             map["error"]= 500;
         }
-        //return super.getErrorAttributes(request, options)
+        return super.getErrorAttributes(request, options)
     }
 }

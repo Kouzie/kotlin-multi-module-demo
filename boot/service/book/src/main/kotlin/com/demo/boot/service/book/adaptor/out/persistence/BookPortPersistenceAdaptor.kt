@@ -21,7 +21,7 @@ class BookPortPersistenceAdaptor(
     }
 
     override fun findBook(request: FindBookRequest): Flux<BookDomain> {
-        repository(request.)
+        return Flux.never();
     }
 
 }

@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono
 @RestController
 class CustomerController(
     val signinUsecase: SigninUsecase,
-    val withdrawalUsecase: WithDrawalUsecase,
     val mapper: CustomerMapper,
 ) {
 
@@ -26,7 +25,5 @@ class CustomerController(
 
     @DeleteMapping
     fun withdrawal() {
-        val customerId: String = ""
-
     }
 }

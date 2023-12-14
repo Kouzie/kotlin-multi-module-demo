@@ -6,13 +6,14 @@ import com.demo.boot.service.book.application.port.`in`.FindBookUsecase
 import com.demo.boot.service.book.application.port.out.FindBookPort
 import com.demo.data.book.domain.BookDomain
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 
 @Service
 class FindBookService(
     val findBookPort: FindBookPort
 ) : FindBookUsecase {
 
-    override fun findBook(request: FindBookRequest): FindBookResult {
-        findBookPort()
+    override fun findBook(request: FindBookRequest): Flux<BookDomain> {
+        return findBookPort.findBook(request)
     }
 }

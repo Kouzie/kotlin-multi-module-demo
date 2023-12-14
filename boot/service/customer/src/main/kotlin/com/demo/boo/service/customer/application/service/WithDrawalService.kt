@@ -14,9 +14,8 @@ class WithDrawalService(
     private val getCustomerPort: GetCustomerPort,
     private val updateCustomerPort: UpdateCustomerPort,
 ) : WithDrawalUsecase {
-    override fun withDrawal(customerId: Long): Mono<Unit> {
-        getCustomerPort.getCustomerById(customerId)
-
-        updateCustomerPort.updateCustomer(customerDomain)
+    override fun withDrawal(customerId: Long): Mono<CustomerDomain> {
+        return getCustomerPort.getCustomerById(customerId)
+            .flatMap { updateCustomerPort.updateCustomer(it) }
     }
 }
