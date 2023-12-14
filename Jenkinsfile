@@ -32,7 +32,7 @@ pipeline {
                             }
                         }
                     }
-                    def modulePaths = Set<String>() // 변경된 모듈 paths
+                    def modulePaths = new HashSet<String>() // 변경된 모듈 paths
                     for(def change : changes) {
                         if (change.endsWith("build.gradle.kts")) {
                             // build.gradle.kts 가 변경되었다면 모든 서비스 빌드
