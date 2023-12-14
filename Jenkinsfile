@@ -8,7 +8,7 @@ pipeline {
         pollSCM('H/2 * * * *') // 2분마다 pollSCM
     }
     stages {
-        def affectedServices;
+        def affectedServices = null
         stage('get affected services') {
             steps {
                 // GitChangeSetList
