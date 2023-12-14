@@ -64,10 +64,10 @@ pipeline {
                 } // end script
             }
         }
-        stage('build service') {
-            steps {
-                // TODO
-            }
-        }
+//         stage('build service') {
+//             steps {
+//                 // TODO
+//             }
+//         }
     }
 }
