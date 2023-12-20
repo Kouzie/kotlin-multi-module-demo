@@ -1,15 +1,19 @@
 import kotlin.collections.emptyList
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import kotlin.collections.setOf
+import kotlin.collections.listOf
 
 plugins {
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management") apply false
-    id("com.google.cloud.tools.jib") apply false
+    id("com.google.cloud.tools.jib")
 }
+
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "com.google.cloud.tools.jib")
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter")
@@ -41,6 +45,37 @@ configure(
         project(":boot:service:dashboard"),
     )
 ) {
+    apply(plugin = "com.google.cloud.tools.jib")
+
+    val uniqueBuildId = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+    val dockerhubUsername: String = project.properties["dhUsername"].toString()
+    val dockerhubPassword: String = project.properties["dhPassword"].toString()
+    jib {
+        from {
+            image = "docker.io/library/openjdk:17-jdk-slim"
+        }
+        to {
+            image = "kgy1996/${project.name}-service"
+            tags = setOf(uniqueBuildId)
+            // ./gradlew clean :boot:service:amin:jib -PdhUsername=foo -PdhPassword=bar
+            auth {
+                username = dockerhubUsername
+                password = dockerhubPassword
+            }
+        }
+        container {
+            creationTime = "USE_CURRENT_TIMESTAMP"
+            jvmFlags = listOf(
+                "-Dserver.port=8080",
+                "-Dfile.encoding=UTF-8",
+                "-XshowSettings:vm",
+                "-XX:+UseContainerSupport",
+                "-XX:MinRAMPercentage=50.0",
+                "-XX:MaxRAMPercentage=80.0",
+            )
+        }
+    }
+
     tasks.getByName("bootJar") {
         enabled = true
     }
@@ -72,7 +107,6 @@ configure(
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
         implementation("io.r2dbc:r2dbc-h2")
-        // implementation(project(":data:customer"))
     }
 }
 
@@ -136,7 +170,7 @@ tasks.register("getAffectedServices") {
         project.findProperty("modules")?.toString()?.split(",") ?: emptyList()
     doLast {
         val services = getAffectedServices(*inputs.toTypedArray())
-        println("All Services: $services")
+        println(services.joinToString(","))
     }
 }
 
@@ -146,6 +180,6 @@ tasks.register("getAllServices") {
             .filter { it.path.startsWith(":boot:service:") }
             .map { service -> service.path }
             .toSet()
-        println("All Services: $services")
+        println(services.joinToString(","))
     }
 }

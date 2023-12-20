@@ -5,7 +5,6 @@ import com.demo.boo.service.customer.adaptor.out.persistence.CustomerEntity
 import com.demo.data.customer.domain.CustomerDomain
 import com.demo.data.customer.domain.CustomerStatus
 import com.demo.data.customer.dto.CustomerDto
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,7 +12,6 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class CustomerMapper(
-    val encoder: PasswordEncoder,
 ) {
 
     val dtf: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
